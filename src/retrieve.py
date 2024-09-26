@@ -77,6 +77,7 @@ class VectorDB:
             AssertionError: If no tables are found in the database.
         """
         min_distance, table = None, None
+
         print("Comparing distances...")
         for embedded_table in self.embedded_tables:
             # Calculate cosine distance between query and table vectors
