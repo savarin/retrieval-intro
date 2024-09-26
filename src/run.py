@@ -1,49 +1,59 @@
 import json
-import os
 
-from openai import OpenAI
-from pydantic import BaseModel
-
-from retrieve import tables
-
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-
-class Response(BaseModel):
-    sql_query: str
-
-
-def create_messages(table, query):
-    return [
-        {
-            "role": "system",
-            "content": f"""\
-You are a world-class data analyst. Please return the minimum SQL to the
-user request and do not use aliases.
-
-The relevant table is: {json.dumps(table)}""",
-        },
-        {
-            "role": "user",
-            "content": query,
-        },
-    ]
+from agent import Agent
+from retrieve import VectorDB
 
 
 if __name__ == "__main__":
+    tables = [
+        {
+            "table_name": "dim_user",
+            "columns": [
+                {
+                    "column_name": "user_id",
+                    "column_type": "int",
+                },
+                {
+                    "column_name": "user_name",
+                    "column_type": "str",
+                },
+            ],
+        },
+        {
+            "table_name": "fact_events",
+            "columns": [
+                {
+                    "column_name": "event_id",
+                    "column_type": "int",
+                },
+                {
+                    "column_name": "event_name",
+                    "column_type": "str",
+                },
+            ],
+        },
+    ]
+
+    print("Initializing agent...")
+    agent = Agent()
+
+    print("Initializing vector db...")
+    vector_db = VectorDB()
+
+    print("Inserting tables...")
+    for table in tables:
+        embedding_vector = agent.embed(json.dumps(table))
+        vector_db.insert(table, embedding_vector)
+        print(f"  {table['table_name']} done...")
+
     while True:
-        user_prompt = input("> ")
+        user_prompt = input("\n> ")
 
         if user_prompt == "exit":
             break
 
-        if len(user_prompt) == 0:
-            user_prompt = "Number of users."
+        embedded_user_prompt = agent.embed(user_prompt)
+        table = vector_db.get(embedded_user_prompt)
 
-        completion = client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
-            messages=create_messages(tables[0], user_prompt),
-            response_format=Response,
-        )
-        print(completion.choices[0].message.parsed.sql_query)
+        sql = agent.codegen(table, user_prompt)
+        print(f"\nSQL: {sql}")
