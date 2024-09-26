@@ -44,6 +44,19 @@ TABLES = [
 
 
 def set_up() -> Tuple[Agent, VectorDB]:
+    """
+    Set up the SQL query generation system by initializing the Agent and
+    VectorDB, and populating the VectorDB with table embeddings.
+
+    This function performs the following steps:
+    1. Initializes an Agent for embedding and SQL generation.
+    2. Initializes a VectorDB for storing and retrieving embedded tables.
+    3. Embeds each predefined table and stores it in the VectorDB.
+
+    Returns:
+        Tuple[Agent, VectorDB]: A tuple containing the initialized Agent and
+        VectorDB.
+    """
     # Initialize the agent (handles embedding and SQL generation)
     print("Initializing agent...")
     agent = Agent()
@@ -74,7 +87,7 @@ if __name__ == "__main__":
         if user_prompt == "exit":
             break
 
-        # Process the user's query
+        # Process the user query
         embedded_user_prompt = agent.embed(user_prompt)
         table = vector_db.get(embedded_user_prompt)
         sql = agent.codegen(table, user_prompt)
