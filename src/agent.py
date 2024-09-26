@@ -9,9 +9,12 @@ from typing import Dict, List
 from dataclasses import dataclass
 import json
 import os
+
 from openai import OpenAI
 from pydantic import BaseModel
+
 from retrieve import Table
+
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -42,6 +45,7 @@ def create_template(table: str, query: str) -> List[Dict[str, str]]:
             "content": f"""\
 You are a world-class data analyst. Please return the minimum SQL to the
 user request and do not use aliases.
+
 The relevant table is: {table}""",
         },
         {

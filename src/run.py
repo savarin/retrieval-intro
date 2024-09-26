@@ -6,8 +6,10 @@ interactive loop for processing user queries.
 """
 
 import json
+
 from agent import Agent
 from retrieve import VectorDB
+
 
 if __name__ == "__main__":
     # Sample table definitions

@@ -8,6 +8,7 @@ based on a query vector.
 
 from typing import List, TypedDict
 from dataclasses import dataclass
+
 from scipy.spatial.distance import cosine
 
 
