@@ -1,3 +1,4 @@
+from typing import Dict, List
 from dataclasses import dataclass
 import json
 import os
@@ -5,16 +6,18 @@ import os
 from openai import OpenAI
 from pydantic import BaseModel
 
+from retrieve import Table
+
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 @dataclass
 class Response(BaseModel):
-    sql_query: str
+    sql: str
 
 
-def create_template(table, query):
+def create_template(table: str, query: str) -> List[Dict[str, str]]:
     return [
         {
             "role": "system",
@@ -33,10 +36,10 @@ The relevant table is: {table}""",
 
 @dataclass
 class Agent:
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def embed(self, string):
+    def embed(self, string: str) -> List[float]:
         return (
             self.client.embeddings.create(
                 input=[string],
@@ -46,10 +49,13 @@ class Agent:
             .embedding
         )
 
-    def codegen(self, table, user_prompt):
+    def codegen(self, table: Table, user_prompt: str) -> str:
         completion = client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=create_template(json.dumps(table), user_prompt),
             response_format=Response,
         )
-        return completion.choices[0].message.parsed.sql_query
+        message = completion.choices[0].message.parsed
+        assert message is not None
+
+        return message.sql

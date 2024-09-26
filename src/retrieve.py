@@ -21,14 +21,17 @@ class EmbeddedTable(TypedDict):
 
 @dataclass
 class VectorDB:
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.embedded_tables: List[EmbeddedTable] = []
 
-    def insert(self, table, embedding_vector):
-        embedded_table = {"table": table, "embedding_vector": embedding_vector}
+    def insert(self, table: Table, embedding_vector: List[float]) -> None:
+        embedded_table: EmbeddedTable = {
+            "table": table,
+            "embedding_vector": embedding_vector,
+        }
         self.embedded_tables.append(embedded_table)
 
-    def get(self, query_vector):
+    def get(self, query_vector: List[float]) -> Table:
         min_distance, table = None, None
 
         print("Comparing distances...")
@@ -40,4 +43,5 @@ class VectorDB:
                 min_distance = distance
                 table = embedded_table["table"]
 
+        assert table is not None
         return table
