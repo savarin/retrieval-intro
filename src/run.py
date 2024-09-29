@@ -9,7 +9,7 @@ from typing import Tuple
 import json
 
 from agent import Agent
-from retrieve import VectorDB
+from vector_db import VectorDB
 
 
 # Sample table definitions
