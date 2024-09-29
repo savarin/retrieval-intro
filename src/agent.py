@@ -5,15 +5,13 @@ This module contains the core functionality for processing user queries and
 generating SQL. It uses OpenAI's API for both text embedding and SQL generation.
 """
 
-from typing import Dict, List
+from typing import Dict, List, TypedDict
 from dataclasses import dataclass
 import json
 import os
 
 from openai import OpenAI
 from pydantic import BaseModel
-
-from retrieve import Table
 
 
 # Initialize OpenAI client
@@ -40,6 +38,20 @@ def convert_text_to_embedding_vector(text: str) -> List[float]:
     )
 
 
+class Column(TypedDict):
+    """Represents a column in a database table."""
+
+    column_name: str
+    column_type: str
+
+
+class Table(TypedDict):
+    """Represents a database table structure."""
+
+    table_name: str
+    columns: List[Column]
+
+
 @dataclass
 class Response(BaseModel):
     """Pydantic model for the expected response format from the OpenAI API."""
@@ -47,7 +59,7 @@ class Response(BaseModel):
     sql: str
 
 
-def create_template(table: str, query: str) -> List[Dict[str, str]]:
+def create_template(table: Table, query: str) -> List[Dict[str, str]]:
     """
     Create a template for the chat completion API.
 
@@ -66,7 +78,7 @@ def create_template(table: str, query: str) -> List[Dict[str, str]]:
 You are a world-class data analyst. Please return the minimum SQL to the
 user request and do not use aliases.
 
-The relevant table is: {table}""",
+The relevant table is: {json.dumps(table)}""",
         },
         {
             "role": "user",
@@ -98,7 +110,7 @@ class Agent:
         """
         completion = self.client.beta.chat.completions.parse(
             model="gpt-4o-mini",
-            messages=create_template(json.dumps(table), user_prompt),
+            messages=create_template(table, user_prompt),
             response_format=Response,
         )
         message = completion.choices[0].message.parsed
