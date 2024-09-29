@@ -60,7 +60,7 @@ TABLES = [
             {
                 "column_name": "port_id",
                 "column_type": "str",
-                "column_description": "Port of embarkation (S: Southampton, C: Cherbourg, Q: Queenstown)",
+                "column_description": "Port of embarkation",
             },
             {
                 "column_name": "code",
@@ -146,8 +146,9 @@ if __name__ == "__main__":
             break
 
         # Process the user query
-        table = json.loads(vector_db.get_top_k(user_prompt, 1)[0][1])
-        sql = agent.generate_sql(table, user_prompt)
+        top_2 = vector_db.get_top_k(user_prompt, 2)
+        tables = [json.loads(pair[1]) for pair in top_2]
+        sql = agent.generate_sql(tables, user_prompt)
 
         # Display the generated SQL query
         print(f"\nSQL: {sql}")

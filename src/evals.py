@@ -56,8 +56,9 @@ if __name__ == "__main__":
     # Iterate through each evaluation case
     for individual_eval in EVALS:
         # Process the user query
-        table = json.loads(vector_db.get_top_k(individual_eval.user_prompt, 1)[0][1])
-        sql = agent.generate_sql(table, individual_eval.user_prompt)
+        top_1 = vector_db.get_top_k(individual_eval.user_prompt, 1)
+        tables = [json.loads(pair[1]) for pair in top_1]
+        sql = agent.generate_sql(tables, individual_eval.user_prompt)
 
         # Check if the generated SQL matches any of the target codes
         if sql in individual_eval.target_codes:

@@ -60,7 +60,7 @@ class Response(BaseModel):
     sql: str
 
 
-def create_template(table: Table, query: str) -> List[Dict[str, str]]:
+def create_template(tables: List[Table], query: str) -> List[Dict[str, str]]:
     """
     Create a template for the chat completion API.
 
@@ -79,7 +79,7 @@ def create_template(table: Table, query: str) -> List[Dict[str, str]]:
 You are a world-class data analyst. Please return the minimum SQL to the
 user request and do not use aliases.
 
-The relevant table is: {json.dumps(table)}""",
+The tables in descending order of relevance are: {json.dumps(tables)}""",
         },
         {
             "role": "user",
@@ -98,7 +98,7 @@ class Agent:
         """Initialize the OpenAI client."""
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def generate_sql(self, table: Table, user_prompt: str) -> str:
+    def generate_sql(self, tables: List[Table], user_prompt: str) -> str:
         """
         Generate SQL code based on the table structure and user prompt.
 
@@ -111,7 +111,7 @@ class Agent:
         """
         completion = self.client.beta.chat.completions.parse(
             model="gpt-4o-mini",
-            messages=create_template(table, user_prompt),
+            messages=create_template(tables, user_prompt),
             response_format=Response,
         )
         message = completion.choices[0].message.parsed
