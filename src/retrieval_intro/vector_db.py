@@ -49,7 +49,9 @@ class VectorDB:
 
         self.text_vector_pairs.append(text_vector_pair)
 
-    def get_top_k(self, query: str, k: int = 1) -> List[Tuple[float, str]]:
+    def get_top_k(
+        self, query: str, k: int = 1, openai_api_key: Optional[str] = None
+    ) -> List[Tuple[float, str]]:
         """
         Retrieve the top-k most similar pairs to the given query string.
 
@@ -59,6 +61,7 @@ class VectorDB:
 
         Args:
             query (str): The query string to compare against.
+            openai_api_key (Optional[str]): OpenAI API key.
 
         Returns:
             List[TextVectorPair]: The most similar text-vector pairs.
@@ -66,7 +69,7 @@ class VectorDB:
         Raises:
             AssertionError: If no pairs are found in the database.
         """
-        query_vector = convert_text_to_embedding_vector(query)
+        query_vector = convert_text_to_embedding_vector(query, openai_api_key)
         distance_pairs = []
 
         for text_vector_pair in self.text_vector_pairs:
