@@ -105,29 +105,50 @@ class Agent:
     openai_api_key: InitVar[Optional[str]] = None
 
     def __post_init__(self, openai_api_key: Optional[str]) -> None:
-        """Initialize the OpenAI client.
+        """
+        Initialize the OpenAI client.
 
         Args:
             openai_api_key (Optional[str]): OpenAI API key.
         """
         self.client = OpenAI(api_key=openai_api_key or os.getenv("OPENAI_API_KEY"))
 
-    def generate_sql(self, tables: List[Table], user_prompt: str) -> str:
+    def generate_sql(
+        self, tables: List[Table], user_prompt: str, is_structured_response: bool = True
+    ) -> Optional[str]:
         """
         Generate SQL code based on the table structure and user prompt.
 
         Args:
             table (Table): The table structure.
             user_prompt (str): The user's natural language query.
+            is_structured_response (bool): Use structured response format.
 
         Returns:
             str: The generated SQL query.
         """
-        completion = self.client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
-            messages=create_template(tables, user_prompt),
-            response_format=Response,
-        )
-        message = completion.choices[0].message.parsed
-        assert message is not None
-        return message.sql
+        messages = create_template(tables, user_prompt)
+        content: Optional[str] = None
+
+        if is_structured_response:
+            completion = self.client.beta.chat.completions.parse(
+                model="gpt-4o-mini",
+                messages=messages,
+                response_format=Response,
+            )
+            message = completion.choices[0].message.parsed
+            assert message is not None
+
+            content = message.sql
+
+        else:
+            content = (
+                self.client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=messages,
+                )
+                .choices[0]
+                .message.content
+            )
+
+        return content
