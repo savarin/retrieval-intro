@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retrieval_intro"
+version = "0.1.0"
+description = "A simple text-to-SQL RAG pipeline"
+authors = [{name = "Ezzeri Esa", email = "ezzeri.esa@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.9"
+
+[tool.setuptools.packages.find]
+where = ["src"]
