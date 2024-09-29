@@ -90,7 +90,7 @@ if __name__ == "__main__":
         # Process the user query
         embedded_user_prompt = convert_text_to_embedding_vector(user_prompt)
         table = vector_db.get(embedded_user_prompt)
-        sql = agent.codegen(table, user_prompt)
+        sql = agent.generate_sql(table, user_prompt)
 
         # Display the generated SQL query
         print(f"\nSQL: {sql}")

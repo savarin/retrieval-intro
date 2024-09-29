@@ -30,8 +30,6 @@ def convert_text_to_embedding_vector(text: str) -> List[float]:
     Returns:
         List[float]: The embedding vector.
     """
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
     return (
         client.embeddings.create(
             input=[text],
@@ -87,7 +85,7 @@ class Agent:
         """Initialize the OpenAI client."""
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def codegen(self, table: Table, user_prompt: str) -> str:
+    def generate_sql(self, table: Table, user_prompt: str) -> str:
         """
         Generate SQL code based on the table structure and user prompt.
 

@@ -67,7 +67,7 @@ if __name__ == "__main__":
             individual_eval.user_prompt
         )
         table = vector_db.get(embedded_user_prompt)
-        sql = agent.codegen(table, individual_eval.user_prompt)
+        sql = agent.generate_sql(table, individual_eval.user_prompt)
 
         # Check if the generated SQL matches any of the target codes
         if sql in individual_eval.target_codes:

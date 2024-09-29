@@ -1,8 +1,8 @@
 """
-Defines the VectorDB class for storing and retrieving embedded tables.
+Defines the VectorDB class for storing and retrieving text-vector pairs.
 
 This module implements a simple vector database for storing table structures
-along with their embedding vectors, and retrieving the most similar table
+along with their embedding vectors, and retrieving the most similar tables
 based on a query vector.
 """
 
