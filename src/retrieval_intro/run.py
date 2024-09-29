@@ -121,7 +121,7 @@ def set_up(openai_api_key: Optional[str] = None) -> Tuple[Agent, VectorDB]:
     """
     # Initialize the agent (handles embedding and SQL generation)
     print("Initializing agent...")
-    agent = Agent()
+    agent = Agent(openai_api_key)
 
     # Initialize the vector database (stores and retrieves embedded tables)
     print("Initializing vector db...")
