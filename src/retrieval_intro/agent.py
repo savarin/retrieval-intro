@@ -18,10 +18,6 @@ from openai.types.chat import (
 from pydantic import BaseModel
 
 
-# Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-
 def convert_text_to_embedding_vector(
     text: str, api_key: Optional[str] = None
 ) -> List[float]:

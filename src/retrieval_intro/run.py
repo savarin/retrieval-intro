@@ -13,7 +13,7 @@ from .vector_db import VectorDB
 
 
 # Sample table metadata
-TABLES_METADATA = [
+TABLE_METADATA = [
     {
         "table_name": "dim_passengers",
         "columns": [
@@ -126,7 +126,7 @@ def set_up() -> Tuple[Agent, VectorDB]:
 
     # Embed and store each table in the vector database
     print("Inserting tables...")
-    for table in TABLES_METADATA:
+    for table in TABLE_METADATA:
         vector_db.insert(json.dumps(table))
         print(f"  {table['table_name']} done...")
 
