@@ -9,7 +9,7 @@ vector.
 from typing import List, Tuple, TypedDict
 from dataclasses import dataclass
 
-from scipy.spatial.distance import cosine
+from scipy.spatial.distance import euclidean
 
 from agent import convert_text_to_embedding_vector
 
@@ -68,7 +68,7 @@ class VectorDB:
 
         for text_vector_pair in self.text_vector_pairs:
             # Calculate cosine distance between query and stored text
-            distance = cosine(text_vector_pair["embedding_vector"], query_vector)
+            distance = euclidean(text_vector_pair["embedding_vector"], query_vector)
             distance_pairs.append((distance, text_vector_pair["text"]))
 
         return sorted(distance_pairs)[:k]
