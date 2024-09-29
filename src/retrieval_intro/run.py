@@ -130,7 +130,7 @@ def set_up(openai_api_key: Optional[str] = None) -> Tuple[Agent, VectorDB]:
     # Embed and store each table in the vector database
     print("Inserting tables...")
     for table in TABLE_METADATA:
-        vector_db.insert(json.dumps(table))
+        vector_db.insert(json.dumps(table), openai_api_key)
         print(f"  {table['table_name']} done...")
 
     return agent, vector_db

@@ -6,7 +6,7 @@ their embedding vectors, and retrieving the most similar text based on a query
 vector.
 """
 
-from typing import List, Tuple, TypedDict
+from typing import List, Optional, Tuple, TypedDict
 from dataclasses import dataclass
 
 from scipy.spatial.distance import euclidean  # type: ignore[import-untyped]
@@ -33,17 +33,20 @@ class VectorDB:
         """
         self.text_vector_pairs: List[TextVectorPair] = []
 
-    def insert(self, text: str) -> None:
+    def insert(self, text: str, openai_api_key: Optional[str] = None) -> None:
         """
         Convert text into embedding vector and insert a pair into the database.
 
         Args:
             text (str): The text to insert.
+            openai_api_key (Optional[str]): OpenAI API key.
         """
+        embedding_vector = convert_text_to_embedding_vector(text, openai_api_key)
         text_vector_pair: TextVectorPair = {
             "text": text,
-            "embedding_vector": convert_text_to_embedding_vector(text),
+            "embedding_vector": embedding_vector,
         }
+
         self.text_vector_pairs.append(text_vector_pair)
 
     def get_top_k(self, query: str, k: int = 1) -> List[Tuple[float, str]]:
