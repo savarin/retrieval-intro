@@ -12,8 +12,8 @@ from .agent import Agent
 from .vector_db import VectorDB
 
 
-# Sample table definitions
-TABLES = [
+# Sample table metadata
+TABLES_METADATA = [
     {
         "table_name": "dim_passengers",
         "columns": [
@@ -126,7 +126,7 @@ def set_up() -> Tuple[Agent, VectorDB]:
 
     # Embed and store each table in the vector database
     print("Inserting tables...")
-    for table in TABLES:
+    for table in TABLES_METADATA:
         vector_db.insert(json.dumps(table))
         print(f"  {table['table_name']} done...")
 

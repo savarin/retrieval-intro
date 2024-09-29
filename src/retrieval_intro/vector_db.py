@@ -9,7 +9,7 @@ vector.
 from typing import List, Tuple, TypedDict
 from dataclasses import dataclass
 
-from scipy.spatial.distance import euclidean
+from scipy.spatial.distance import euclidean  # type: ignore[import-untyped]
 
 from .agent import convert_text_to_embedding_vector
 

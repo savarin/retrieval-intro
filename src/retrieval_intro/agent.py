@@ -5,12 +5,16 @@ This module contains the core functionality for processing user queries and
 generating SQL. It uses OpenAI's API for both text embedding and SQL generation.
 """
 
-from typing import Dict, List, TypedDict
+from typing import List, Optional, TypedDict
 from dataclasses import dataclass
 import json
 import os
 
 from openai import OpenAI
+from openai.types.chat import (
+    ChatCompletionSystemMessageParam,
+    ChatCompletionUserMessageParam,
+)
 from pydantic import BaseModel
 
 
@@ -18,16 +22,21 @@ from pydantic import BaseModel
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-def convert_text_to_embedding_vector(text: str) -> List[float]:
+def convert_text_to_embedding_vector(
+    text: str, api_key: Optional[str] = None
+) -> List[float]:
     """
     Create an embedding vector from the given text string.
 
     Args:
         text (str): The input text string to embed.
+        api_key (Optional[str]): OpenAI API key.
 
     Returns:
         List[float]: The embedding vector.
     """
+    client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
+
     return (
         client.embeddings.create(
             input=[text],
@@ -60,7 +69,10 @@ class Response(BaseModel):
     sql: str
 
 
-def create_template(tables: List[Table], query: str) -> List[Dict[str, str]]:
+# def create_template(tables: List[Table], query: str) -> List[Dict[str, str]]:
+def create_template(
+    tables: List[Table], query: str
+) -> List[ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam]:
     """
     Create a template for the chat completion API.
 
@@ -94,9 +106,9 @@ class Agent:
     Agent class for handling embedding and SQL generation tasks.
     """
 
-    def __post_init__(self) -> None:
+    def __post_init__(self, api_key: Optional[str] = None) -> None:
         """Initialize the OpenAI client."""
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
 
     def generate_sql(self, tables: List[Table], user_prompt: str) -> str:
         """
