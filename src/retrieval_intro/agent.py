@@ -19,19 +19,19 @@ from pydantic import BaseModel
 
 
 def convert_text_to_embedding_vector(
-    text: str, api_key: Optional[str] = None
+    text: str, openai_api_key: Optional[str] = None
 ) -> List[float]:
     """
     Create an embedding vector from the given text string.
 
     Args:
         text (str): The input text string to embed.
-        api_key (Optional[str]): OpenAI API key.
+        openai_api_key (Optional[str]): OpenAI API key.
 
     Returns:
         List[float]: The embedding vector.
     """
-    client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
+    client = OpenAI(api_key=openai_api_key or os.getenv("OPENAI_API_KEY"))
 
     return (
         client.embeddings.create(
@@ -102,9 +102,13 @@ class Agent:
     Agent class for handling embedding and SQL generation tasks.
     """
 
-    def __post_init__(self, api_key: Optional[str] = None) -> None:
-        """Initialize the OpenAI client."""
-        self.client = OpenAI(api_key=api_key or os.getenv("OPENAI_API_KEY"))
+    def __post_init__(self, openai_api_key: Optional[str] = None) -> None:
+        """Initialize the OpenAI client.
+
+        Args:
+            openai_api_key (Optional[str]): OpenAI API key.
+        """
+        self.client = OpenAI(api_key=openai_api_key or os.getenv("OPENAI_API_KEY"))
 
     def generate_sql(self, tables: List[Table], user_prompt: str) -> str:
         """

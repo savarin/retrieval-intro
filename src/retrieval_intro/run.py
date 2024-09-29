@@ -5,7 +5,7 @@ This script initializes the system, prepares sample data, and runs an
 interactive loop for processing user queries.
 """
 
-from typing import Tuple
+from typing import Optional, Tuple
 import json
 
 from .agent import Agent
@@ -102,7 +102,7 @@ TABLE_METADATA = [
 ]
 
 
-def set_up() -> Tuple[Agent, VectorDB]:
+def set_up(openai_api_key: Optional[str] = None) -> Tuple[Agent, VectorDB]:
     """
     Set up the SQL query generation system by initializing the Agent and
     VectorDB, and populating the VectorDB with table embeddings.
@@ -111,6 +111,9 @@ def set_up() -> Tuple[Agent, VectorDB]:
     1. Initializes an Agent for embedding and SQL generation.
     2. Initializes a VectorDB for storing and retrieving embedded tables.
     3. Embeds each predefined table and stores it in the VectorDB.
+
+    Args:
+        openai_api_key (Optional[str]): OpenAI API key.
 
     Returns:
         Tuple[Agent, VectorDB]: A tuple containing the initialized Agent and
