@@ -9,7 +9,7 @@ from typing import List
 from dataclasses import dataclass
 import json
 
-from run import set_up
+from .run import set_up
 
 
 @dataclass

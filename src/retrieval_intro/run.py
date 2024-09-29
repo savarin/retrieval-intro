@@ -8,8 +8,8 @@ interactive loop for processing user queries.
 from typing import Tuple
 import json
 
-from agent import Agent
-from vector_db import VectorDB
+from .agent import Agent
+from .vector_db import VectorDB
 
 
 # Sample table definitions
