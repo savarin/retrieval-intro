@@ -6,7 +6,7 @@ generating SQL. It uses OpenAI's API for both text embedding and SQL generation.
 """
 
 from typing import List, Optional, TypedDict
-from dataclasses import dataclass
+from dataclasses import InitVar, dataclass
 import json
 import os
 
@@ -102,7 +102,9 @@ class Agent:
     Agent class for handling embedding and SQL generation tasks.
     """
 
-    def __post_init__(self, openai_api_key: Optional[str] = None) -> None:
+    openai_api_key: InitVar[Optional[str]] = None
+
+    def __post_init__(self, openai_api_key: Optional[str]) -> None:
         """Initialize the OpenAI client.
 
         Args:
