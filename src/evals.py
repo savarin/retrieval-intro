@@ -7,6 +7,8 @@ query generation model to assess its performance.
 
 from typing import List
 from dataclasses import dataclass
+
+from agent import convert_text_to_embedding_vector
 from run import set_up
 
 
@@ -61,7 +63,9 @@ if __name__ == "__main__":
     # Iterate through each evaluation case
     for individual_eval in EVALS:
         # Process the user query
-        embedded_user_prompt = agent.embed(individual_eval.user_prompt)
+        embedded_user_prompt = convert_text_to_embedding_vector(
+            individual_eval.user_prompt
+        )
         table = vector_db.get(embedded_user_prompt)
         sql = agent.codegen(table, individual_eval.user_prompt)
 

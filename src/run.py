@@ -8,7 +8,7 @@ interactive loop for processing user queries.
 from typing import Tuple
 import json
 
-from agent import Agent
+from agent import Agent, convert_text_to_embedding_vector
 from retrieve import VectorDB
 
 
@@ -68,7 +68,7 @@ def set_up() -> Tuple[Agent, VectorDB]:
     # Embed and store each table in the vector database
     print("Inserting tables...")
     for table in TABLES:
-        embedding_vector = agent.embed(json.dumps(table))
+        embedding_vector = convert_text_to_embedding_vector(json.dumps(table))
         vector_db.insert(table, embedding_vector)
         print(f"  {table['table_name']} done...")
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
             break
 
         # Process the user query
-        embedded_user_prompt = agent.embed(user_prompt)
+        embedded_user_prompt = convert_text_to_embedding_vector(user_prompt)
         table = vector_db.get(embedded_user_prompt)
         sql = agent.codegen(table, user_prompt)
 

@@ -20,6 +20,28 @@ from retrieve import Table
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
+def convert_text_to_embedding_vector(text: str) -> List[float]:
+    """
+    Create an embedding vector from the given text string.
+
+    Args:
+        text (str): The input text string to embed.
+
+    Returns:
+        List[float]: The embedding vector.
+    """
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    return (
+        client.embeddings.create(
+            input=[text],
+            model="text-embedding-3-small",
+        )
+        .data[0]
+        .embedding
+    )
+
+
 @dataclass
 class Response(BaseModel):
     """Pydantic model for the expected response format from the OpenAI API."""
@@ -65,25 +87,6 @@ class Agent:
         """Initialize the OpenAI client."""
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    def embed(self, string: str) -> List[float]:
-        """
-        Generate an embedding for the given string.
-
-        Args:
-            string (str): The input string to embed.
-
-        Returns:
-            List[float]: The embedding vector.
-        """
-        return (
-            self.client.embeddings.create(
-                input=[string],
-                model="text-embedding-3-small",
-            )
-            .data[0]
-            .embedding
-        )
-
     def codegen(self, table: Table, user_prompt: str) -> str:
         """
         Generate SQL code based on the table structure and user prompt.
@@ -95,7 +98,7 @@ class Agent:
         Returns:
             str: The generated SQL query.
         """
-        completion = client.beta.chat.completions.parse(
+        completion = self.client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=create_template(json.dumps(table), user_prompt),
             response_format=Response,
