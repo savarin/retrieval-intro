@@ -43,6 +43,7 @@ class Column(TypedDict):
 
     column_name: str
     column_type: str
+    column_description: str
 
 
 class Table(TypedDict):

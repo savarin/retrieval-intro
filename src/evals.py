@@ -30,24 +30,17 @@ class Eval:
 # Define a list of evaluation cases
 EVALS = [
     Eval(
-        user_prompt="Number of users",
+        user_prompt="Number of passengers",
         target_codes=[
-            "SELECT COUNT(user_id) FROM dim_user;",
-            "SELECT COUNT(*) FROM dim_user;",
+            "SELECT COUNT(passenger_id) FROM dim_passengers;",
+            "SELECT COUNT(*) FROM dim_passengers;",
         ],
     ),
     Eval(
-        user_prompt="Number of users with id > 100",
+        user_prompt="Number of passengers above 21 years of age",
         target_codes=[
-            "SELECT COUNT(user_id) FROM dim_user WHERE user_id > 100;",
-            "SELECT COUNT(*) FROM dim_user WHERE user_id > 100;",
-        ],
-    ),
-    Eval(
-        user_prompt="Number of events",
-        target_codes=[
-            "SELECT COUNT(event_id) FROM fact_events;",
-            "SELECT COUNT(*) FROM fact_events;",
+            "SELECT COUNT(passenger_id) FROM dim_passengers WHERE age > 21;",
+            "SELECT COUNT(*) FROM dim_passengers WHERE age > 21;",
         ],
     ),
 ]
