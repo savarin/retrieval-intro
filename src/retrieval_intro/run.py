@@ -35,17 +35,17 @@ TABLE_METADATA = [
             {
                 "column_name": "sex",
                 "column_type": "str",
-                "column_description": "Gender of the passenger (male or female)",
+                "column_description": "Sex of the passenger (male, female)",
             },
             {
                 "column_name": "age",
                 "column_type": "float",
-                "column_description": "Age of the passenger in years",
+                "column_description": "Age of the passenger in years, may be null",
             },
             {
                 "column_name": "is_survivor",
                 "column_type": "bool",
-                "column_description": "Indicates whether the passenger survived (True) or not (False)",
+                "column_description": "Whether the passenger survived or not (True, False)",
             },
         ],
     },
@@ -60,12 +60,12 @@ TABLE_METADATA = [
             {
                 "column_name": "port_id",
                 "column_type": "str",
-                "column_description": "Port of embarkation",
+                "column_description": "Port of embarkation, may be null",
             },
             {
-                "column_name": "code",
+                "column_name": "class",
                 "column_type": "str",
-                "column_description": "Ticket code or number",
+                "column_description": "Passenger class (1, 2, 3)",
             },
             {
                 "column_name": "fare",
@@ -75,7 +75,7 @@ TABLE_METADATA = [
             {
                 "column_name": "cabin",
                 "column_type": "str",
-                "column_description": "Cabin number (may be null)",
+                "column_description": "Cabin number, may be null",
             },
         ],
     },
@@ -85,12 +85,12 @@ TABLE_METADATA = [
             {
                 "column_name": "port_id",
                 "column_type": "str",
-                "column_description": "Unique identifier for each port (C: Cherbourg, Q: Queenstown, S: Southampton)",
+                "column_description": "Unique identifier for each port (C, Q, S)",
             },
             {
                 "column_name": "port_name",
                 "column_type": "str",
-                "column_description": "Full name of the port",
+                "column_description": "Full name of the port (Cherbourg, Queenstown, Southampton)",
             },
             {
                 "column_name": "country",
