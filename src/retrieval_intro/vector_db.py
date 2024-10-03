@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 from scipy.spatial.distance import euclidean  # type: ignore[import-untyped]
 
-from .agent import convert_text_to_embedding_vector
+from agent import convert_text_to_embedding_vector
 
 
 class TextVectorPair(TypedDict):

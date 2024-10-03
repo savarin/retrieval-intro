@@ -35,7 +35,7 @@ def convert_text_to_embedding_vector(
 
     return (
         client.embeddings.create(
-            input=[text],
+            input=text,
             model="text-embedding-3-small",
         )
         .data[0]
@@ -65,7 +65,6 @@ class Response(BaseModel):
     sql: str
 
 
-# def create_template(tables: List[Table], query: str) -> List[Dict[str, str]]:
 def create_template(
     tables: List[Table], query: str
 ) -> List[ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam]:
