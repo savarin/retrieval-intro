@@ -65,7 +65,6 @@ class Response(BaseModel):
     sql: str
 
 
-# def create_template(tables: List[Table], query: str) -> List[Dict[str, str]]:
 def create_template(
     tables: List[Table], query: str
 ) -> List[ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam]:
